@@ -13,6 +13,7 @@ using namespace std;
 void drawBoard(int board[BOARD_HEIGHT][BOARD_LENGTH]);
 void fallDown(int board[BOARD_HEIGHT][BOARD_LENGTH], int column, int player);
 bool playableInput(int columnInput, int board[BOARD_HEIGHT][BOARD_LENGTH]);
+void checkHorizontalPower(int board[BOARD_HEIGHT][BOARD_LENGTH]);
 
 int main(){
     int board[BOARD_HEIGHT][BOARD_LENGTH] = {EMPTY};
@@ -30,7 +31,10 @@ int main(){
             fallDown(board, columnImput - 1, playerPlaying);
             drawBoard(board);
             playerPlaying = !playerPlaying;
+            checkHorizontalPower(board);
         }
+        else
+            cout<< "invalid input";
     }
     return 0;
 }
@@ -59,8 +63,17 @@ void drawBoard(int board[BOARD_HEIGHT][BOARD_LENGTH]) {
 }
 
 bool playableInput(int columnInput, int board[BOARD_HEIGHT][BOARD_LENGTH]){
-    if (board[0][columnInput] != EMPTY)
+    if (board[0][columnInput -1] != EMPTY)
         return false;
     else
         return true;
+}
+
+void checkHorizontalPower(int board[BOARD_HEIGHT][BOARD_LENGTH]){
+    for (int i = 0; i < BOARD_HEIGHT; ++i) {
+        for (int j = 0; j < BOARD_LENGTH-3; ++j) {
+            if (board[i][j] == board[i][j+1] && board[i][j] == board[i][j+2] && board[i][j] == board[i][j+3] && board[i][j] != EMPTY)
+                cout<< "win";
+        }
+    }
 }
