@@ -12,6 +12,7 @@ using namespace std;
 
 void drawBoard(int board[BOARD_HEIGHT][BOARD_LENGTH]);
 void fallDown(int board[BOARD_HEIGHT][BOARD_LENGTH], int column, int player);
+bool playableInput(int columnInput, int board[BOARD_HEIGHT][BOARD_LENGTH]);
 
 int main(){
     int board[BOARD_HEIGHT][BOARD_LENGTH] = {EMPTY};
@@ -25,16 +26,13 @@ int main(){
 
         cout << "Dans quelle colonne voulez-vous jouer ? ";
         cin >> columnImput;
-        fallDown(board, columnImput - 1, playerPlaying);
-        drawBoard(board);
-        playerPlaying = !playerPlaying;
-
-
-
+        if (playableInput(columnImput, board)){
+            fallDown(board, columnImput - 1, playerPlaying);
+            drawBoard(board);
+            playerPlaying = !playerPlaying;
+        }
     }
-
     return 0;
-
 }
 
 void fallDown(int board[BOARD_HEIGHT][BOARD_LENGTH], int column, int player) {
@@ -58,4 +56,11 @@ void drawBoard(int board[BOARD_HEIGHT][BOARD_LENGTH]) {
         cout << " | \n";
         cout << "  ----------------------------" "\n";
     }
+}
+
+bool playableInput(int columnInput, int board[BOARD_HEIGHT][BOARD_LENGTH]){
+    if (board[0][columnInput] != EMPTY)
+        return false;
+    else
+        return true;
 }
