@@ -17,6 +17,7 @@ int main(){
     int board[BOARD_HEIGHT][BOARD_LENGTH] = {EMPTY};
     bool winner = false;
     int columnImput;
+    bool playerPlaying = false;
 
     drawBoard(board);
 
@@ -24,8 +25,9 @@ int main(){
 
         cout << "Dans quelle colonne voulez-vous jouer ? ";
         cin >> columnImput;
-        fallDown(board, columnImput - 1, PLAYER1);
+        fallDown(board, columnImput - 1, playerPlaying);
         drawBoard(board);
+        playerPlaying = !playerPlaying;
 
 
 
@@ -37,9 +39,9 @@ int main(){
 
 void fallDown(int board[BOARD_HEIGHT][BOARD_LENGTH], int column, int player) {
 
-    for (int l = BOARD_HEIGHT -1; l > 0; l--) {
+    for (int l = BOARD_HEIGHT -1; l >= 0; l--) {
         if (board[l][column] == EMPTY) {
-            board[l][column] = player;
+            board[l][column] = player +1;
             break;
         }
     }
