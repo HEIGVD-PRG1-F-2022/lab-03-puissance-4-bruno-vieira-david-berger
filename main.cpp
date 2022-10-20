@@ -13,34 +13,41 @@ using namespace std;
 void drawBoard(int board[BOARD_HEIGHT][BOARD_LENGTH]);
 void fallDown(int board[BOARD_HEIGHT][BOARD_LENGTH], int column, int player);
 bool playableInput(int columnInput, int board[BOARD_HEIGHT][BOARD_LENGTH]);
-void checkHorizontalPower(int board[BOARD_HEIGHT][BOARD_LENGTH]);
+int checkHorizontalWin(int board[BOARD_HEIGHT][BOARD_LENGTH]);
+int checkVerticalWin(int board[BOARD_HEIGHT][BOARD_LENGTH]);
+int checkDiagonalWin(int board[BOARD_HEIGHT][BOARD_LENGTH]);
+int checkWin(int board[BOARD_HEIGHT][BOARD_LENGTH]);
 
 int main(){
     int board[BOARD_HEIGHT][BOARD_LENGTH] = {EMPTY};
-    bool winner = false;
-    int columnImput;
+    bool gameOver = false;
+    int columnInput;
     bool playerPlaying = false;
+    int winner = EMPTY;
 
     drawBoard(board);
 
-    while (winner == false) {
+    while (gameOver == false) {
 
         cout << "Dans quelle colonne voulez-vous jouer ? ";
-        cin >> columnImput;
-        if (playableInput(columnImput, board)){
-            fallDown(board, columnImput - 1, playerPlaying);
+        cin >> columnInput;
+        if (playableInput(columnInput, board)){
+            fallDown(board, columnInput - 1, playerPlaying);
             drawBoard(board);
+            if(checkWin(board) != EMPTY){
+                gameOver = true;
+                winner = checkWin(board);
+            }
             playerPlaying = !playerPlaying;
-            checkHorizontalPower(board);
         }
         else
             cout<< "invalid input";
     }
+    cout<<"Le vainqueur est le joueur " <<winner;
     return 0;
 }
 
 void fallDown(int board[BOARD_HEIGHT][BOARD_LENGTH], int column, int player) {
-
     for (int l = BOARD_HEIGHT -1; l >= 0; l--) {
         if (board[l][column] == EMPTY) {
             board[l][column] = player +1;
@@ -53,6 +60,7 @@ void fallDown(int board[BOARD_HEIGHT][BOARD_LENGTH], int column, int player) {
 void drawBoard(int board[BOARD_HEIGHT][BOARD_LENGTH]) {
 
     // print board for testing
+    cout<<endl;
     for (int i = 0; i < BOARD_HEIGHT; ++i) {
         for (int j = 0; j < BOARD_LENGTH; ++j) {
             cout << " | " << board[i][j];
@@ -69,11 +77,49 @@ bool playableInput(int columnInput, int board[BOARD_HEIGHT][BOARD_LENGTH]){
         return true;
 }
 
-void checkHorizontalPower(int board[BOARD_HEIGHT][BOARD_LENGTH]){
-    for (int i = 0; i < BOARD_HEIGHT; ++i) {
-        for (int j = 0; j < BOARD_LENGTH-3; ++j) {
-            if (board[i][j] == board[i][j+1] && board[i][j] == board[i][j+2] && board[i][j] == board[i][j+3] && board[i][j] != EMPTY)
-                cout<< "win";
+int checkHorizontalWin(int board[BOARD_HEIGHT][BOARD_LENGTH]){
+    for (int l = 0; l < BOARD_HEIGHT; ++l) {
+        for (int c = 0; c < BOARD_LENGTH-3; ++c) {
+            if (board[l][c] == board[l][c+1] && board[l][c] == board[l][c+2] && board[l][c] == board[l][c+3] && board[l][c] != EMPTY)
+                return board[l][c];
         }
     }
+    return EMPTY;
+}
+
+int checkVerticalWin(int board[BOARD_HEIGHT][BOARD_LENGTH]){
+    for (int l = 0; l < BOARD_HEIGHT-3; ++l) {
+        for (int c = 0; c < BOARD_LENGTH; ++c) {
+            if (board[l][c] == board[l+1][c] && board[l][c] == board[l+2][c] && board[l][c] == board[l+3][c] && board[l][c] != EMPTY)
+                return board[l][c];
+        }
+    }
+    return EMPTY;
+}
+
+int checkDiagonalWin(int board[BOARD_HEIGHT][BOARD_LENGTH]){
+    for (int l = 0; l < BOARD_HEIGHT-3; ++l) {
+        for (int c = 0; c < BOARD_LENGTH-3; ++c) {
+            if (board[l][c] == board[l+1][c+1] && board[l][c] == board[l+2][c+2] && board[l][c] == board[l+3][c+3] && board[l][c] != EMPTY)
+                return board[l][c];
+        }
+    }
+    for (int l = BOARD_HEIGHT - 1; l > 3; --l) {
+        for (int c = BOARD_LENGTH - 4; c >= 0 ; --c) {
+            if (board[l][c] == board[l-1][c+1] && board[l][c] == board[l-2][c+2] && board[l][c] == board[l-3][c+3] && board[l][c] != EMPTY)
+                return board[l][c];
+        }
+    }
+    return EMPTY;
+}
+
+int checkWin(int board[BOARD_HEIGHT][BOARD_LENGTH]){
+    if(checkHorizontalWin(board) != EMPTY)
+        return checkHorizontalWin(board);
+    else if(checkDiagonalWin(board) != EMPTY)
+        return checkDiagonalWin(board);
+    else if(checkVerticalWin(board) != EMPTY)
+        return checkVerticalWin(board);
+    else
+        return EMPTY;
 }
