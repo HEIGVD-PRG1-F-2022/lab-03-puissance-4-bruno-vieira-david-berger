@@ -75,7 +75,9 @@ void drawBoard(int board[BOARD_HEIGHT][BOARD_LENGTH]) {
     cout<<endl;
     for (int i = 0; i < BOARD_HEIGHT; ++i) {
         for (int j = 0; j < BOARD_LENGTH; ++j) {
-            switch (board[i][j]) {
+
+            //pour ecrire en couleur
+         /*   switch (board[i][j]) {
                 case PLAYER1:
                     cout << " | " << PLAYER1_CHAR;
                     break;
@@ -85,11 +87,11 @@ void drawBoard(int board[BOARD_HEIGHT][BOARD_LENGTH]) {
                 default:
                     cout << " |  ";
                     break;
-            }
-            /*if (board[i][j] == EMPTY)
+            } */
+            if (board[i][j] == EMPTY)
                 cout << " |  ";
             else
-                cout << " | " << board[i][j];*/
+                cout << " | " << board[i][j];
         }
         cout << " | \n";
         cout << "  ----------------------------" "\n";
