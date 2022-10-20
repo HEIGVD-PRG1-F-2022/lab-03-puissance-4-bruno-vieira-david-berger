@@ -17,6 +17,7 @@ int checkHorizontalWin(int board[BOARD_HEIGHT][BOARD_LENGTH]);
 int checkVerticalWin(int board[BOARD_HEIGHT][BOARD_LENGTH]);
 int checkDiagonalWin(int board[BOARD_HEIGHT][BOARD_LENGTH]);
 int checkWin(int board[BOARD_HEIGHT][BOARD_LENGTH]);
+bool checkDraw(int board[BOARD_HEIGHT][BOARD_LENGTH]);
 
 int main(){
     int board[BOARD_HEIGHT][BOARD_LENGTH] = {EMPTY};
@@ -24,6 +25,7 @@ int main(){
     int columnInput;
     bool playerPlaying = false;
     int winner = EMPTY;
+    bool draw = false;
 
     drawBoard(board);
 
@@ -38,12 +40,22 @@ int main(){
                 gameOver = true;
                 winner = checkWin(board);
             }
+            if (checkDraw(board)) {
+                gameOver = true;
+                draw = true;
+                break;
+            }
             playerPlaying = !playerPlaying;
         }
         else
             cout<< "invalid input";
     }
-    cout<<"Le vainqueur est le joueur " <<winner;
+    if (draw) {
+        cout << "Egalite" << endl;
+    }
+    else {
+        cout << "Le vainqueur est le joueur " << winner;
+    }
     return 0;
 }
 
@@ -63,7 +75,21 @@ void drawBoard(int board[BOARD_HEIGHT][BOARD_LENGTH]) {
     cout<<endl;
     for (int i = 0; i < BOARD_HEIGHT; ++i) {
         for (int j = 0; j < BOARD_LENGTH; ++j) {
-            cout << " | " << board[i][j];
+            switch (board[i][j]) {
+                case PLAYER1:
+                    cout << " | " << PLAYER1_CHAR;
+                    break;
+                case PLAYER2:
+                    cout << " | " << PLAYER2_CHAR;
+                    break;
+                default:
+                    cout << " |  ";
+                    break;
+            }
+            /*if (board[i][j] == EMPTY)
+                cout << " |  ";
+            else
+                cout << " | " << board[i][j];*/
         }
         cout << " | \n";
         cout << "  ----------------------------" "\n";
@@ -122,4 +148,13 @@ int checkWin(int board[BOARD_HEIGHT][BOARD_LENGTH]){
         return checkVerticalWin(board);
     else
         return EMPTY;
+}
+
+bool checkDraw(int board[BOARD_HEIGHT][BOARD_LENGTH]) {
+    bool isDraw = false;
+    for (int i; i < BOARD_LENGTH; i++) {
+        isDraw |= playableInput(i, board);
+    }
+    return isDraw;
+
 }
